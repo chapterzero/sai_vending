@@ -109,6 +109,7 @@ func (m *Machine) TotalInputRegister() int {
 }
 
 func (m *Machine) Display() string {
+	return ""
 }
 
 func (m *Machine) createRegisterCopy() (map[Currency]int, []Currency) {
@@ -126,6 +127,10 @@ func (m *Machine) createRegisterCopy() (map[Currency]int, []Currency) {
 func (m *Machine) isAllowToBuy(i int) error {
 	if i < 0 || i >= len(m.inventories) {
 		return fmt.Errorf("Invalid inventory, please enter number from (1 to %d)", len(m.inventories))
+	}
+
+	if m.inventories[i].Stock <= 0 {
+		return fmt.Errorf("This item is sold out")
 	}
 
 	ttlInput := m.TotalInputRegister()

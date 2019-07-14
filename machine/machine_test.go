@@ -131,6 +131,34 @@ func TestMachineBuyInsertedMoneyNotEnough(t *testing.T) {
 	}
 }
 
+func TestMachineBuyInsertedEmptyInventory(t *testing.T) {
+	m := &Machine{
+		mainRegister:  map[Currency]int{C10: 9},
+		inputRegister: []Currency{C100},
+		inventories: []Inventory{
+			Inventory{
+				Item{
+					Name:  "Item 1",
+					Price: 100,
+				},
+				99,
+			},
+			Inventory{
+				Item{
+					Name:  "Item 2",
+					Price: 90,
+				},
+				0,
+			},
+		},
+	}
+
+	err := m.Buy(1)
+	if err == nil {
+		t.Errorf("Expected error not nil, got nil")
+	}
+}
+
 func TestMachineBuySuccessful(t *testing.T) {
 	m := &Machine{
 		mainRegister:  map[Currency]int{C10: 9},
@@ -499,9 +527,6 @@ func TestGetReturned(t *testing.T) {
 	if len(m.returnRegister) != 0 {
 		t.Errorf("Expected return register to be empty after calls, got %d", len(m.returnRegister))
 	}
-}
-
-func TestDisplay(t *testing.T) {
 }
 
 func TestMachineTotalInputRegister(t *testing.T) {
