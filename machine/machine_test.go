@@ -357,15 +357,15 @@ func TestMachineDoubleBuyOverpayWithDouble500Coins(t *testing.T) {
 	}
 }
 
-func TestMachineDoubleBuyOverpayWithDouble500Coins(t *testing.T) {
+func TestMachineDoubleBuyOverpayNotEnoughChangeWith500Coin(t *testing.T) {
 	m := &Machine{
 		mainRegister:  map[Currency]int{C10: 9, C100: 4},
-		inputRegister: []Currency{C500, C500},
+		inputRegister: []Currency{C500},
 		inventories: []Inventory{
 			Inventory{
 				Item{
 					Name:  "Item 1",
-					Price: 100,
+					Price: 50,
 				},
 				99,
 			},
@@ -383,12 +383,12 @@ func TestMachineDoubleBuyOverpayWithDouble500Coins(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected error nil, got %v", err.Error())
 	}
-	// 1 x 500 + 3 X 100 + 9 X 10
-	if len(m.inputRegister) != 13 {
-		t.Errorf("Expected input register contain 13 coins, got %d", len(m.inputRegister))
+	// 3 X 100 + 9 X 10
+	if len(m.inputRegister) != 12 {
+		t.Errorf("Expected input register contain 12 coins, got %d", len(m.inputRegister))
 	}
-	if m.TotalInputRegister() != 890 {
-		t.Errorf("Expected input register total 490 got %d", m.TotalInputRegister())
+	if m.TotalInputRegister() != 390 {
+		t.Errorf("Expected input register total 390 got %d", m.TotalInputRegister())
 	}
 	if m.mainRegister[C10] != 0 {
 		t.Errorf("Expected main register coin 10 count 0, got %d", m.mainRegister[C10])
@@ -404,24 +404,24 @@ func TestMachineDoubleBuyOverpayWithDouble500Coins(t *testing.T) {
 	}
 
 	// 2nd buy
-	err = m.Buy(1)
+	err = m.Buy(0)
 	if err != nil {
 		t.Errorf("Expected error nil, got %v", err.Error())
 	}
-	// 1 x 500 + 2 X 100 + 8 X 10
-	if len(m.inputRegister) != 11 {
-		t.Errorf("Expected input register contain 13 coins, got %d", len(m.inputRegister))
+	// 3 X 100 + 4 X 10
+	if len(m.inputRegister) != 7 {
+		t.Errorf("Expected input register contain 7 coins, got %d", len(m.inputRegister))
 	}
-	if m.TotalInputRegister() != 780 {
-		t.Errorf("Expected input register total 890 got %d", m.TotalInputRegister())
+	if m.TotalInputRegister() != 340 {
+		t.Errorf("Expected input register total 340 got %d", m.TotalInputRegister())
 	}
-	if m.inventories[1].Stock != 97 {
-		t.Errorf("Expected inventories 1 stocks reduced to 97, got %d", m.inventories[1].Stock)
+	if m.inventories[0].Stock != 98 {
+		t.Errorf("Expected inventories 0 stocks reduced to 98, got %d", m.inventories[0].Stock)
 	}
-	if m.mainRegister[C10] != 1 {
-		t.Errorf("Expected main register coin 10 count 0, got %d", m.mainRegister[C10])
+	if m.mainRegister[C10] != 5 {
+		t.Errorf("Expected main register coin 10 count 1, got %d", m.mainRegister[C10])
 	}
-	if m.mainRegister[C100] != 2 {
+	if m.mainRegister[C100] != 1 {
 		t.Errorf("Expected main register coin 100 count 2, got %d", m.mainRegister[C100])
 	}
 	if m.mainRegister[C500] != 1 {
@@ -433,8 +433,8 @@ func TestMachineDoubleBuyOverpayWithDouble500Coins(t *testing.T) {
 	if m.outlet[0].Name != "Item 2" {
 		t.Errorf("Expected outlet name Item 2, got %v", m.outlet[0].Name)
 	}
-	if m.outlet[1].Name != "Item 2" {
-		t.Errorf("Expected outlet name Item 2, got %v", m.outlet[1].Name)
+	if m.outlet[1].Name != "Item 1" {
+		t.Errorf("Expected outlet name Item 1, got %v", m.outlet[1].Name)
 	}
 }
 

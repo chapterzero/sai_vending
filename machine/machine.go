@@ -133,6 +133,7 @@ func calculateChange(mR map[Currency]int, iR []Currency, taken, itemPrice int) (
 			mR[C10]--
 			iR = append([]Currency{C10}, iR...)
 		} else {
+			// TODO: create unit test to prove if this condition might happen
 			// there is still remaining change
 			// but coin to return are empty
 			return mR, iR, fmt.Errorf("Unable to return change")
