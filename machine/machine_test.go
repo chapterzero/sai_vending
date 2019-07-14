@@ -438,6 +438,72 @@ func TestMachineDoubleBuyOverpayNotEnoughChangeWith500Coin(t *testing.T) {
 	}
 }
 
+func TestGetItems(t *testing.T) {
+	m := &Machine{
+		outlet: []Item{
+			Item{
+				Name: "item 1",
+			},
+			Item{
+				Name: "item 2",
+			},
+		},
+	}
+
+	items := m.GetItems()
+	if len(items) != 2 {
+		t.Errorf("Assert items length 2, got %d", len(items))
+	}
+	if len(m.outlet) != 0 {
+		t.Errorf("Item at machine must be cleared after GetItems called, got %d", len(m.outlet))
+	}
+}
+
+func TestReturnInput(t *testing.T) {
+	m := &Machine{
+		inputRegister: []Currency{
+			C10,
+			C500,
+			C50,
+		},
+		returnRegister: []Currency{
+			C500,
+		},
+	}
+
+	m.ReturnInput()
+	if len(m.inputRegister) != 0 {
+		t.Errorf("Expected input register is empty after return empty, got %d", len(m.inputRegister))
+	}
+	if len(m.returnRegister) != 4 {
+		t.Errorf("Expected return register len is 4, got %d", len(m.returnRegister))
+	}
+	// expect return register content: C500, C10, C500, C50
+	if m.returnRegister[0] != C500 && m.returnRegister[1] != C10 && m.returnRegister[2] != C500 && m.returnRegister[3] != C50 {
+		t.Errorf("Wrong return register content")
+	}
+}
+
+func TestGetReturned(t *testing.T) {
+	m := &Machine{
+		returnRegister: []Currency{
+			C100,
+			C10,
+		},
+	}
+
+	coins := m.GetReturn()
+	if len(coins) != 2 {
+		t.Errorf("Expected 2 coins returned, got %d", len(coins))
+	}
+	if len(m.returnRegister) != 0 {
+		t.Errorf("Expected return register to be empty after calls, got %d", len(m.returnRegister))
+	}
+}
+
+func TestDisplay(t *testing.T) {
+}
+
 func TestMachineTotalInputRegister(t *testing.T) {
 	m := &Machine{
 		inputRegister: []Currency{

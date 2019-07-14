@@ -80,6 +80,37 @@ func (m *Machine) Buy(i int) error {
 	return nil
 }
 
+func (m *Machine) GetItems() []Item {
+	defer func() {
+		m.outlet = []Item{}
+	}()
+
+	return m.outlet
+}
+
+func (m *Machine) ReturnInput() {
+	m.returnRegister = append(m.returnRegister, m.inputRegister...)
+	m.inputRegister = []Currency{}
+}
+
+func (m *Machine) GetReturn() []Currency {
+	defer func() {
+		m.returnRegister = []Currency{}
+	}()
+	return m.returnRegister
+}
+
+func (m *Machine) TotalInputRegister() int {
+	ttl := 0
+	for _, v := range m.inputRegister {
+		ttl += int(v)
+	}
+	return ttl
+}
+
+func (m *Machine) Display() string {
+}
+
 func (m *Machine) createRegisterCopy() (map[Currency]int, []Currency) {
 	mainRegister := make(map[Currency]int, 0)
 	inputRegister := make([]Currency, len(m.inputRegister))
@@ -103,14 +134,6 @@ func (m *Machine) isAllowToBuy(i int) error {
 	}
 
 	return nil
-}
-
-func (m *Machine) TotalInputRegister() int {
-	ttl := 0
-	for _, v := range m.inputRegister {
-		ttl += int(v)
-	}
-	return ttl
 }
 
 func calculateChange(mR map[Currency]int, iR []Currency, taken, itemPrice int) (map[Currency]int, []Currency, error) {
