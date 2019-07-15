@@ -7,22 +7,22 @@ import (
 	"os"
 	"strings"
 
-	"github.com/chapterzero/sai_vending/commands"
+	"github.com/chapterzero/sai_vending/handlers"
 	"github.com/chapterzero/sai_vending/machine"
 )
 
 var m *machine.Machine
-var handlers map[string]commands.Handler
+var hMap map[string]handlers.Handler
 
 func init() {
 	log.Println("Initializing...")
 	m = provisionMachine()
-	handlers = map[string]commands.Handler{
-		"1": &commands.InsertHandler{},
-		"2": &commands.BuyHandler{},
-		"3": &commands.GetItemHandler{},
-		"4": &commands.ReturnInputHandler{},
-		"5": &commands.GetReturnHandler{},
+	hMap = map[string]handlers.Handler{
+		"1": &handlers.InsertHandler{},
+		"2": &handlers.BuyHandler{},
+		"3": &handlers.GetItemHandler{},
+		"4": &handlers.ReturnInputHandler{},
+		"5": &handlers.GetReturnHandler{},
 	}
 }
 
@@ -32,11 +32,12 @@ func main() {
 	fmt.Println(m.Display())
 
 	for {
+		fmt.Println("--------------------------------------------------------")
 		log.Println("Enter command")
 		scanner.Scan()
 
 		cmd := strings.Split(scanner.Text(), " ")
-		if h, ok := handlers[cmd[0]]; ok {
+		if h, ok := hMap[cmd[0]]; ok {
 			err := h.Handle(m, cmd)
 			if err != nil {
 				printError(err)
