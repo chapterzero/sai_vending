@@ -1,6 +1,7 @@
 # SAI Vending
 ## Requirement
 - Golang
+- The program output is designed using 4 tabs, so if your terminal display messy output, set the tab to 4, for example in Linux with `tabs -4`
 
 ## Running
 To run the program, clone the repository or use `go get` and run / build `main.go`
