@@ -80,17 +80,17 @@ func (m *Machine) Buy(i int) error {
 	return nil
 }
 
+func (m *Machine) ReturnInput() {
+	m.returnRegister = append(m.returnRegister, m.inputRegister...)
+	m.inputRegister = []Currency{}
+}
+
 func (m *Machine) GetItems() []Item {
 	defer func() {
 		m.outlet = []Item{}
 	}()
 
 	return m.outlet
-}
-
-func (m *Machine) ReturnInput() {
-	m.returnRegister = append(m.returnRegister, m.inputRegister...)
-	m.inputRegister = []Currency{}
 }
 
 func (m *Machine) GetReturn() []Currency {
@@ -106,10 +106,6 @@ func (m *Machine) TotalInputRegister() int {
 		ttl += int(v)
 	}
 	return ttl
-}
-
-func (m *Machine) Display() string {
-	return ""
 }
 
 func (m *Machine) createRegisterCopy() (map[Currency]int, []Currency) {
