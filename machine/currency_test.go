@@ -6,29 +6,34 @@ import (
 
 func TestNewCurrencyFromString(t *testing.T) {
 	testCases := []struct {
-		name     string
-		input    string
-		expected Currency
+		name        string
+		input       string
+		expected    Currency
+		expectedStr string
 	}{
 		{
-			name:     "10 Coin",
-			input:    "10",
-			expected: C10,
+			name:        "10 Coin",
+			input:       "10",
+			expected:    C10,
+			expectedStr: "10 JPY",
 		},
 		{
-			name:     "50 Coin",
-			input:    "50",
-			expected: C50,
+			name:        "50 Coin",
+			input:       "50",
+			expected:    C50,
+			expectedStr: "50 JPY",
 		},
 		{
-			name:     "100 Coin",
-			input:    "100",
-			expected: C100,
+			name:        "100 Coin",
+			input:       "100",
+			expected:    C100,
+			expectedStr: "100 JPY",
 		},
 		{
-			name:     "500 Coin",
-			input:    "500",
-			expected: C500,
+			name:        "500 Coin",
+			input:       "500",
+			expected:    C500,
+			expectedStr: "500 JPY",
 		},
 	}
 
@@ -40,6 +45,9 @@ func TestNewCurrencyFromString(t *testing.T) {
 			}
 			if err != nil {
 				t.Errorf("Expected error nil but got %v", err)
+			}
+			if actual.Str() != tc.expectedStr {
+				t.Errorf("Expected str %v, got %v", tc.expectedStr, actual.Str())
 			}
 		})
 	}

@@ -56,7 +56,7 @@ func (m *Machine) displayReturnAndOutlet() (string, string) {
 		} else {
 			returnStr = ""
 		}
-		returnStr += fmt.Sprintf("%d %s", v, CUR_SYMBOL)
+		returnStr += v.Str()
 	}
 	outletStr := "Empty"
 	for i, v := range m.outlet {

@@ -15,6 +15,10 @@ const (
 	C500 Currency = 500
 )
 
+func (c Currency) Str() string {
+	return fmt.Sprintf("%d %s", c, CUR_SYMBOL)
+}
+
 func NewCurrencyFromString(s string) (Currency, error) {
 	switch s {
 	case "10":
